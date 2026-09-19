@@ -1,0 +1,36 @@
+NimbusCloud Technologies — IT Security Policy
+
+1. Password Requirements
+All employee passwords must be at least 12 characters long, containing a mix of
+uppercase, lowercase, numbers, and special characters. Passwords must be changed
+every 90 days and cannot repeat the last 5 passwords used.
+
+2. Multi-Factor Authentication
+MFA is mandatory for all employees accessing company systems remotely, including
+email, VPN, and internal dashboards. MFA is enforced via the Okta authenticator app.
+
+3. Device Policy
+Only company-issued laptops may be used to access production systems. Personal
+devices may access email only through the approved Mobile Device Management (MDM)
+application. Jailbroken or rooted devices are strictly prohibited from enrollment.
+
+4. Data Classification
+Company data is classified into three tiers: Public, Internal, and Confidential.
+Confidential data (customer PII, financial records, source code) must never be
+shared over unencrypted channels or personal email accounts.
+
+5. Incident Reporting
+Any suspected security incident, including phishing emails, lost devices, or
+unauthorized access, must be reported to security@nimbuscloud.example within
+1 hour of discovery. The security team aims to acknowledge reports within 30 minutes
+during business hours.
+
+6. Third-Party Access
+External vendors requiring system access must undergo a security review and sign
+a Data Processing Agreement (DPA) before credentials are issued. Vendor access is
+automatically revoked after 90 days unless renewed.
+
+7. AI Tool Usage
+Employees may use approved AI coding assistants for internal development work.
+Confidential source code and customer data must not be pasted into public,
+non-enterprise AI tools.
