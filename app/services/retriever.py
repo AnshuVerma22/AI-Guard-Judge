@@ -7,8 +7,7 @@ from sentence_transformers import SentenceTransformer
 DB_DIR = Path("db/chroma")
 
 
-def search_documents(query, top_k=3):
-
+def search_documents(query, top_k=3, max_distance=1.10):
     # Load embedding model
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -29,6 +28,11 @@ def search_documents(query, top_k=3):
         query_embeddings=[query_embedding],
         n_results=top_k
     )
+
+    # Check whether the best retrieved result is relevant
+    best_distance = results["distances"][0][0]
+
+    results["is_relevant"] = best_distance <= max_distance
 
     return results
 

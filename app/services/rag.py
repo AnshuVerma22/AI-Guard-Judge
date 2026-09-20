@@ -19,6 +19,13 @@ def generate_answer(question):
     # Retrieve relevant documents
     results = search_documents(question, top_k=3)
 
+    # Check retrieval relevance before calling the LLM
+    if not results["is_relevant"]:
+        return {
+            "answer": "I could not find this information in the company policies.",
+            "sources": []
+        }
+
     documents = results["documents"][0]
     metadatas = results["metadatas"][0]
 
@@ -40,12 +47,18 @@ def generate_answer(question):
     prompt = f"""
 You are a company policy assistant.
 
-Answer the user's question using ONLY the provided policy context.
+Your job is to answer questions ONLY from the provided policy context.
 
-If the answer is not available in the context, say:
+STRICT RULES:
+
+1. Use only information explicitly stated in the policy context.
+2. Do NOT use your general knowledge.
+3. Do NOT infer missing policy details.
+4. Do NOT combine unrelated policy information to create an answer.
+5. If the context does not explicitly contain the answer, respond exactly:
 "I could not find this information in the company policies."
-
-Do not invent or assume information.
+6. If you are uncertain whether the answer is supported by the context, use the same response above.
+7. Keep the answer concise.
 
 Policy Context:
 {context}
@@ -53,7 +66,7 @@ Policy Context:
 User Question:
 {question}
 
-Answer clearly and concisely.
+Answer:
 """
 
     # Call LLM
@@ -78,7 +91,7 @@ Answer clearly and concisely.
 
 if __name__ == "__main__":
 
-    question = "How much is the domestic travel allowance?"
+    question ="What is the capital of France?"
 
     result = generate_answer(question)
 
