@@ -26,7 +26,11 @@ METRICS_PATH = (
     / "metrics.json"
 )
 
-
+HISTORY_DIR = (
+    Path(__file__).resolve().parent.parent
+    / "results"
+    / "history"
+)
 def load_dataset():
 
     with open(DATASET_PATH, "r", encoding="utf-8") as file:
@@ -179,3 +183,25 @@ if __name__ == "__main__":
         )
 
     print(f"Metrics saved to: {METRICS_PATH}")
+
+# Save evaluation history
+
+HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+
+history_file = (
+    HISTORY_DIR
+    / f"evaluation_{__import__('datetime').datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+)
+
+with open(history_file, "w", encoding="utf-8") as file:
+    json.dump(
+        {
+            "metrics": metrics,
+            "results": results
+        },
+        file,
+        indent=4,
+        ensure_ascii=False
+    )
+
+print(f"Evaluation history saved to: {history_file}")
