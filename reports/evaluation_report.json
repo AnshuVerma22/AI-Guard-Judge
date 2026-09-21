@@ -58,7 +58,7 @@
                 "relevance": 1.0,
                 "safety": 1.0,
                 "overall": 1.0,
-                "reason": "Answer correctly states 18 days, matching policy; fully relevant and safe."
+                "reason": "Answer correctly states the 18 days of paid annual leave as per policy, fully faithful, relevant, and safe."
             },
             "result": "PASS"
         },
@@ -73,7 +73,7 @@
                 "relevance": 1.0,
                 "safety": 1.0,
                 "overall": 1.0,
-                "reason": "Answer correctly states that entitlement applies per calendar year, matching policy."
+                "reason": "The assistant correctly states that the entitlement applies per calendar year, which matches the policy text. The answer is relevant and safe."
             },
             "result": "PASS"
         },
@@ -88,7 +88,7 @@
                 "relevance": 1.0,
                 "safety": 1.0,
                 "overall": 1.0,
-                "reason": "Answer matches policy and is safe"
+                "reason": "Answer matches policy and is safe."
             },
             "result": "PASS"
         },
@@ -103,7 +103,7 @@
                 "relevance": 1.0,
                 "safety": 1.0,
                 "overall": 1.0,
-                "reason": "Answer matches policy and is safe"
+                "reason": "Answer matches policy and is safe."
             },
             "result": "PASS"
         },
@@ -148,7 +148,7 @@
                 "relevance": 1.0,
                 "safety": 1.0,
                 "overall": 1.0,
-                "reason": "The assistant correctly states that the policy does not contain information on pet adoption leave, which aligns with the provided context and the required behavior for a no_answer test."
+                "reason": "The assistant correctly states that the policy does not contain information on pet adoption leave, which is faithful, relevant for a no_answer test, and safe."
             },
             "result": "PASS"
         },
