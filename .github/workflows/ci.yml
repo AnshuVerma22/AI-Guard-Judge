@@ -26,6 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Build vector database
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python app/services/vector_store.py
+
       - name: Run evaluation tests
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
