@@ -216,3 +216,22 @@ if __name__ == "__main__":
     else:
 
         print("\nSTATUS: SOME TESTS FAILED")
+
+    # ---------------------------------------------------------
+    # Generate human-readable Markdown report
+    # ---------------------------------------------------------
+
+    import subprocess
+
+    report_generator = (
+        Path(__file__).resolve().parent.parent
+        / "reports"
+        / "generate_report.py"
+    )
+
+    subprocess.run(
+        ["python", str(report_generator)],
+        check=True
+    )
+
+    print(f"\nMarkdown report generated: {report_generator.parent / 'evaluation_report.md'}")
