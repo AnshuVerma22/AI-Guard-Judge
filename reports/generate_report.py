@@ -17,6 +17,8 @@ total_tests = report["total_tests"]
 passed_tests = report["passed_tests"]
 failed_tests = report["failed_tests"]
 pass_rate = report["pass_rate"]
+evaluation_timestamp = report.get("evaluation_timestamp", "N/A")
+duration_seconds = report.get("duration_seconds", "N/A")
 
 metrics = report.get("metrics_by_test_type", {})
 tests = report.get("tests", [])
@@ -80,8 +82,9 @@ lines.append(f"| Total Tests | {total_tests} |")
 lines.append(f"| Passed | {passed_tests} |")
 lines.append(f"| Failed | {failed_tests} |")
 lines.append(f"| Pass Rate | {pass_rate}% |")
+lines.append(f"| Evaluation Timestamp | {evaluation_timestamp} |")
+lines.append(f"| Evaluation Duration | {duration_seconds} seconds |")
 lines.append("")
-
 lines.append("## Average Evaluation Scores")
 lines.append("")
 lines.append("| Metric | Score |")

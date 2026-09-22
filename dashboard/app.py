@@ -66,8 +66,17 @@ passed_tests = report["passed_tests"]
 failed_tests = report["failed_tests"]
 pass_rate = report["pass_rate"]
 
-tests = report.get("tests", [])
+evaluation_timestamp = report.get(
+    "evaluation_timestamp",
+    "N/A"
+)
 
+duration_seconds = report.get(
+    "duration_seconds",
+    "N/A"
+)
+
+tests = report.get("tests", [])
 
 st.subheader("Overall Performance")
 
@@ -101,7 +110,21 @@ with col4:
         f"{pass_rate}%"
     )
 
+st.subheader("Evaluation Run")
 
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.metric(
+        "Evaluation Duration",
+        f"{duration_seconds} seconds"
+    )
+
+with col2:
+
+    st.write("**Evaluation Timestamp**")
+    st.write(evaluation_timestamp)
 # ---------------------------------------------------------
 # Average evaluation scores
 # ---------------------------------------------------------

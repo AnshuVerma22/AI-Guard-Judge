@@ -1,4 +1,6 @@
 import json
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 from app.services.rag import generate_answer
@@ -80,8 +82,13 @@ def run_test(test_case):
 
 if __name__ == "__main__":
 
-    tests = load_test_cases()
+    evaluation_start = time.perf_counter()
 
+    evaluation_timestamp = datetime.now(
+        timezone.utc
+    ).isoformat()
+
+    tests = load_test_cases()
     test_results = []
 
     for test_case in tests:
@@ -145,8 +152,15 @@ if __name__ == "__main__":
     # Final report
     # ---------------------------------------------------------
 
+    duration_seconds = round(
+        time.perf_counter() - evaluation_start,
+        2
+    )
+
     report = {
         "project": "AI-Guard-Judge",
+        "evaluation_timestamp": evaluation_timestamp,
+        "duration_seconds": duration_seconds,
         "total_tests": total_tests,
         "passed_tests": passed_tests,
         "failed_tests": total_tests - passed_tests,
@@ -196,7 +210,7 @@ if __name__ == "__main__":
     print(f"Passed      : {passed_tests}")
     print(f"Failed      : {total_tests - passed_tests}")
     print(f"Pass Rate   : {overall_pass_rate}%")
-
+    print(f"Duration    : {duration_seconds} seconds")
     print("\nMetrics by Test Type:")
 
     for test_type, data in metrics.items():
