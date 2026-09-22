@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from dotenv import load_dotenv
 from groq import Groq
@@ -80,16 +81,44 @@ Do not include Markdown.
 Do not include additional fields.
 """
 
-    response = client.chat.completions.create(
-        model="openai/gpt-oss-20b",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0
-    )
+    max_retries = 3
+
+    for attempt in range(max_retries):
+
+        try:
+
+            response = client.chat.completions.create(
+                model="openai/gpt-oss-20b",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                temperature=0
+            )
+
+            break
+
+        except Exception as e:
+
+            if "429" in str(e) or "rate_limit" in str(e).lower():
+
+                if attempt == max_retries - 1:
+                    raise
+
+                wait_time = 3 * (attempt + 1)
+
+                print(
+                    f"Rate limit reached. "
+                    f"Retrying in {wait_time} seconds..."
+                )
+
+                time.sleep(wait_time)
+
+            else:
+
+                raise
 
     content = response.choices[0].message.content.strip()
 
