@@ -7,18 +7,22 @@ from sentence_transformers import SentenceTransformer
 DB_DIR = Path("db/chroma")
 
 
+# Load embedding model once when the application starts
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+
+# Connect to ChromaDB once
+client = chromadb.PersistentClient(
+    path=str(DB_DIR)
+)
+
+
+collection = client.get_collection(
+    name="company_policies"
+)
+
+
 def search_documents(query, top_k=3, max_distance=1.10):
-    # Load embedding model
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-
-    # Connect to existing ChromaDB
-    client = chromadb.PersistentClient(
-        path=str(DB_DIR)
-    )
-
-    collection = client.get_collection(
-        name="company_policies"
-    )
 
     # Convert query into embedding
     query_embedding = model.encode(query).tolist()
@@ -35,26 +39,3 @@ def search_documents(query, top_k=3, max_distance=1.10):
     results["is_relevant"] = best_distance <= max_distance
 
     return results
-
-
-if __name__ == "__main__":
-
-    query = "How much is the domestic travel allowance?"
-
-    print(f"\nQuery: {query}\n")
-
-    results = search_documents(query)
-
-    for i, document in enumerate(results["documents"][0]):
-
-        print("=" * 60)
-
-        print(f"Result {i + 1}")
-
-        print(f"Source: {results['metadatas'][0][i]['source']}")
-
-        print(f"Chunk ID: {results['metadatas'][0][i]['chunk_id']}")
-
-        print("\nContent:")
-
-        print(document)

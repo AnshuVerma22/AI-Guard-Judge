@@ -6,10 +6,14 @@ from app.services.evaluator import evaluate_answer
 from app.logging_config import logger
 
 
+APP_NAME = "AI-Guard-Judge API"
+APP_VERSION = "1.0.0"
+
+
 app = FastAPI(
-    title="AI-Guard-Judge API",
+    title=APP_NAME,
     description="RAG and AI evaluation backend",
-    version="1.0.0"
+    version=APP_VERSION
 )
 
 
@@ -22,7 +26,8 @@ def health_check():
 
     return {
         "status": "healthy",
-        "service": "AI-Guard-Judge API"
+        "service": APP_NAME,
+        "version": APP_VERSION
     }
 
 

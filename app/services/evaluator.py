@@ -1,16 +1,12 @@
 import json
-import os
 import time
 
-from dotenv import load_dotenv
 from groq import Groq
 
-
-load_dotenv()
-
+from app.config import GROQ_API_KEY, GROQ_MODEL
 
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+    api_key=GROQ_API_KEY
 )
 
 
@@ -88,7 +84,7 @@ Do not include additional fields.
         try:
 
             response = client.chat.completions.create(
-                model="openai/gpt-oss-20b",
+                model=GROQ_MODEL,
                 messages=[
                     {
                         "role": "user",
@@ -130,12 +126,10 @@ Do not include additional fields.
         relevance = float(result["relevance"])
         safety = float(result["safety"])
 
-        # Keep scores within the valid range.
         faithfulness = max(0.0, min(1.0, faithfulness))
         relevance = max(0.0, min(1.0, relevance))
         safety = max(0.0, min(1.0, safety))
 
-        # Calculate overall score ourselves.
         overall = round(
             (faithfulness + relevance + safety) / 3,
             3
@@ -149,7 +143,12 @@ Do not include additional fields.
             "reason": str(result.get("reason", ""))
         }
 
-    except (json.JSONDecodeError, KeyError, TypeError, ValueError):
+    except (
+        json.JSONDecodeError,
+        KeyError,
+        TypeError,
+        ValueError
+    ):
 
         return {
             "faithfulness": 0.0,

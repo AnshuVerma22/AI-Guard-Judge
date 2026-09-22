@@ -1,16 +1,11 @@
-import os
-
-from dotenv import load_dotenv
 from groq import Groq
 
+from app.config import GROQ_API_KEY, GROQ_MODEL
 from .retriever import search_documents
 
 
-load_dotenv()
-
-
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+    api_key=GROQ_API_KEY
 )
 
 
@@ -83,7 +78,7 @@ Answer:
 
     # Call LLM
     response = client.chat.completions.create(
-        model="openai/gpt-oss-20b",
+        model=GROQ_MODEL,
         messages=[
             {
                 "role": "user",
