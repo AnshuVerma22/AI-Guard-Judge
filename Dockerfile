@@ -7,15 +7,19 @@ ENV PYTHONUNBUFFERED=1
 
 COPY requirements-api.txt .
 
-# CPU-only PyTorch — avoids downloading CUDA/NVIDIA packages
+# Install CPU-only PyTorch to avoid large CUDA/NVIDIA packages
 RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 # Install API dependencies
 RUN pip install --no-cache-dir -r requirements-api.txt
 
+# Copy application code
 COPY app ./app
-COPY db ./db
+
+# Copy policy documents
+COPY data ./data
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Build the vector database, then start the API
+CMD ["sh", "-c", "python app/services/vector_store.py && uvicorn app.api:app --host 0.0.0.0 --port 8000"]
