@@ -1,10 +1,32 @@
-venv/
+# Environment variables
 .env
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# Local databases
 db/
-results/
 *.db
+
+# Evaluation / generated results
+results/
+
+# Logs
 logs/
 *.log
+
+# Local vector database
+.chroma/
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
