@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import chromadb
-from sentence_transformers import SentenceTransformer
 
 from ingestion import load_documents, split_documents
 
@@ -10,24 +9,20 @@ DB_DIR = Path("db/chroma")
 
 
 def create_vector_store():
+
     # Load and split documents
     documents = load_documents()
     chunks = split_documents(documents)
 
     print(f"Documents loaded: {len(documents)}")
-    print(f"Chunks to embed: {len(chunks)}")
-
-    # Load embedding model
-    print("Loading embedding model...")
-
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    print(f"Chunks to store: {len(chunks)}")
 
     # Create ChromaDB client
     client = chromadb.PersistentClient(
         path=str(DB_DIR)
     )
 
-    # Create collection
+    # ChromaDB will handle embeddings automatically
     collection = client.get_or_create_collection(
         name="company_policies"
     )
@@ -38,27 +33,27 @@ def create_vector_store():
     metadatas = []
 
     for chunk in chunks:
+
         ids.append(
             f"{chunk['source']}_{chunk['chunk_id']}"
         )
 
-        texts.append(chunk["content"])
+        texts.append(
+            chunk["content"]
+        )
 
         metadatas.append({
             "source": chunk["source"],
             "chunk_id": chunk["chunk_id"]
         })
 
-    # Generate embeddings
-    print("Creating embeddings...")
+    # Store documents
+    # ChromaDB automatically generates embeddings
+    print("Creating embeddings and storing documents...")
 
-    embeddings = model.encode(texts).tolist()
-
-    # Store everything in ChromaDB
     collection.upsert(
         ids=ids,
         documents=texts,
-        embeddings=embeddings,
         metadatas=metadatas
     )
 

@@ -1,17 +1,12 @@
 from pathlib import Path
 
 import chromadb
-from sentence_transformers import SentenceTransformer
 
 
 DB_DIR = Path("db/chroma")
 
 
-# Load embedding model once when the application starts
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-
-# Connect to ChromaDB once
+# Connect to ChromaDB
 client = chromadb.PersistentClient(
     path=str(DB_DIR)
 )
@@ -24,12 +19,9 @@ collection = client.get_collection(
 
 def search_documents(query, top_k=3, max_distance=1.10):
 
-    # Convert query into embedding
-    query_embedding = model.encode(query).tolist()
-
-    # Search ChromaDB
+    # ChromaDB handles query embedding automatically
     results = collection.query(
-        query_embeddings=[query_embedding],
+        query_texts=[query],
         n_results=top_k
     )
 
