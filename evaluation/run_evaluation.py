@@ -2,15 +2,18 @@ import json
 import sys
 from pathlib import Path
 
+# Allow importing project packages
+sys.path.append(
+    str(Path(__file__).resolve().parent.parent)
+)
 
-# Allow importing services from app/services
+# Allow importing evaluator from app/services
 sys.path.append(
     str(Path(__file__).resolve().parent.parent / "app" / "services")
 )
 
-from rag import generate_answer
+from app.services.rag import generate_answer
 from evaluator import evaluate_answer
-
 
 DATASET_PATH = Path(__file__).parent / "evaluation_dataset.json"
 
@@ -183,25 +186,3 @@ if __name__ == "__main__":
         )
 
     print(f"Metrics saved to: {METRICS_PATH}")
-
-# Save evaluation history
-
-HISTORY_DIR.mkdir(parents=True, exist_ok=True)
-
-history_file = (
-    HISTORY_DIR
-    / f"evaluation_{__import__('datetime').datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-)
-
-with open(history_file, "w", encoding="utf-8") as file:
-    json.dump(
-        {
-            "metrics": metrics,
-            "results": results
-        },
-        file,
-        indent=4,
-        ensure_ascii=False
-    )
-
-print(f"Evaluation history saved to: {history_file}")

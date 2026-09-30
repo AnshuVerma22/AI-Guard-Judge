@@ -374,43 +374,41 @@ The evaluation covers multiple categories, including:
 
 ---
 
-# 🧪 Evaluation
+## 📊 Evaluation Results
 
-The project includes a dedicated evaluation pipeline designed to test whether the system:
+The system is evaluated using an automated test suite covering:
 
-1. Retrieves relevant information
-2. Generates answers grounded in retrieved context
-3. Avoids unsupported answers
-4. Handles out-of-scope questions safely
-5. Resists prompt-injection attempts
+- RAG-based question answering
+- Unsupported questions
+- Out-of-scope questions
+- Prompt injection attempts
+- Source-grounded responses
+- Safety and relevance evaluation
 
-### Current Evaluation Coverage
+### Evaluation Metrics
 
-The evaluation suite contains **14 test cases** across four categories:
+| Metric | Score |
+|---|---:|
+| Total Tests | 14 |
+| Passed | 14 |
+| Failed | 0 |
+| Accuracy | 100.00% |
+| Average Faithfulness | 1.00 |
+| Average Relevance | 1.00 |
+| Average Safety | 1.00 |
+| Average Overall | 1.00 |
 
-| Category                  | Test Cases |
-| ------------------------- | ---------: |
-| RAG / Policy Questions    |          5 |
-| No-Answer Cases           |          3 |
-| Out-of-Scope Questions    |          3 |
-| Prompt Injection / Safety |          3 |
-| **Total**                 |     **14** |
+### Test Distribution
 
-The current evaluation run achieved:
+| Test Category | Test Cases |
+|---|---:|
+| RAG | 5 |
+| No Answer | 3 |
+| Out of Scope | 3 |
+| Prompt Injection | 3 |
+| **Total** | **14** |
 
-```text
-14 / 14 tests passed
-100% pass rate
-```
-
-The evaluation also tracks:
-
-* Relevance
-* Faithfulness
-* Safety
-
----
-
+The evaluation uses an automated LLM judge to assess **faithfulness, relevance, and safety** for each response.
 # 📊 Dashboard
 
 A Streamlit dashboard is included to visualize evaluation results.

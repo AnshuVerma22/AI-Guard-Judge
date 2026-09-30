@@ -2,7 +2,8 @@ from pathlib import Path
 
 import chromadb
 
-from ingestion import load_documents, split_documents
+from .ingestion import load_documents, split_documents
+from .embedding import MiniLMEmbeddingFunction
 
 
 DB_DIR = Path("db/chroma")
@@ -17,14 +18,18 @@ def create_vector_store():
     print(f"Documents loaded: {len(documents)}")
     print(f"Chunks to store: {len(chunks)}")
 
+    # Create embedding function
+    embedding_function = MiniLMEmbeddingFunction()
+
     # Create ChromaDB client
     client = chromadb.PersistentClient(
         path=str(DB_DIR)
     )
 
-    # ChromaDB will handle embeddings automatically
+    # Use the same embedding function as the existing vectors
     collection = client.get_or_create_collection(
-        name="company_policies"
+        name="company_policies",
+        embedding_function=embedding_function
     )
 
     # Prepare data
@@ -48,7 +53,6 @@ def create_vector_store():
         })
 
     # Store documents
-    # ChromaDB automatically generates embeddings
     print("Creating embeddings and storing documents...")
 
     collection.upsert(

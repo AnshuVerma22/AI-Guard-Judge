@@ -2,8 +2,14 @@ from pathlib import Path
 
 import chromadb
 
+from .embedding import MiniLMEmbeddingFunction
+
 
 DB_DIR = Path("db/chroma")
+
+
+# Create embedding function
+embedding_function = MiniLMEmbeddingFunction()
 
 
 # Connect to ChromaDB
@@ -19,9 +25,12 @@ collection = client.get_collection(
 
 def search_documents(query, top_k=3, max_distance=1.10):
 
-    # ChromaDB handles query embedding automatically
+    # Generate query embedding locally
+    query_embedding = embedding_function([query])[0]
+
+    # Search using the generated embedding
     results = collection.query(
-        query_texts=[query],
+        query_embeddings=[query_embedding],
         n_results=top_k
     )
 
