@@ -1,31 +1,20 @@
-from pathlib import Path
 
 import torch
 from transformers import AutoTokenizer, AutoModel
 
 
-MODEL_PATH = (
-    Path.home()
-    / ".cache"
-    / "huggingface"
-    / "hub"
-    / "models--sentence-transformers--all-MiniLM-L6-v2"
-    / "snapshots"
-    / "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
-)
+MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
 class MiniLMEmbeddingFunction:
 
     def __init__(self):
         self.tokenizer = AutoTokenizer.from_pretrained(
-            str(MODEL_PATH),
-            local_files_only=True
+            MODEL_NAME
         )
 
         self.model = AutoModel.from_pretrained(
-            str(MODEL_PATH),
-            local_files_only=True
+            MODEL_NAME
         )
 
         self.model.eval()
@@ -48,6 +37,9 @@ class MiniLMEmbeddingFunction:
         )
 
     def _embed(self, texts):
+        if not texts:
+            return []
+
         encoded = self.tokenizer(
             texts,
             padding=True,
