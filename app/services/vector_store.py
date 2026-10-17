@@ -11,28 +11,22 @@ DB_DIR = Path("db/chroma")
 
 def create_vector_store():
 
-    # Load and split documents
     documents = load_documents()
     chunks = split_documents(documents)
 
     print(f"Documents loaded: {len(documents)}")
     print(f"Chunks to store: {len(chunks)}")
 
-    # Create embedding function
     embedding_function = MiniLMEmbeddingFunction()
 
-    # Create ChromaDB client
     client = chromadb.PersistentClient(
         path=str(DB_DIR)
     )
 
-    # Use the same embedding function as the existing vectors
     collection = client.get_or_create_collection(
         name="company_policies",
-        embedding_function=embedding_function
     )
 
-    # Prepare data
     ids = []
     texts = []
     metadatas = []
@@ -52,13 +46,15 @@ def create_vector_store():
             "chunk_id": chunk["chunk_id"]
         })
 
-    # Store documents
     print("Creating embeddings and storing documents...")
+
+    embeddings = embedding_function(texts)
 
     collection.upsert(
         ids=ids,
         documents=texts,
-        metadatas=metadatas
+        metadatas=metadatas,
+        embeddings=embeddings
     )
 
     print("Vector database created successfully!")
