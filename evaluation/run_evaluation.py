@@ -13,7 +13,7 @@ sys.path.append(
 )
 
 from app.services.rag import generate_answer
-from evaluator import evaluate_answer
+from app.services.evaluator import evaluate_answer
 
 DATASET_PATH = Path(__file__).parent / "evaluation_dataset.json"
 

@@ -249,3 +249,15 @@ if __name__ == "__main__":
     )
 
     print(f"\nMarkdown report generated: {report_generator.parent / 'evaluation_report.md'}")
+
+def test_evaluation_cases():
+    test_cases = load_test_cases()
+
+    assert len(test_cases) > 0, "No evaluation cases found"
+
+    for test_case in test_cases:
+        result = run_test(test_case)
+
+        assert result["result"] == "PASS", (
+            f"Test failed: {result['id']} - {result['question']}"
+        )

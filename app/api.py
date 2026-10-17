@@ -21,6 +21,19 @@ class QuestionRequest(BaseModel):
     question: str = Field(..., min_length=1)
 
 
+class EvaluationRequest(BaseModel):
+    question: str = Field(..., min_length=1)
+    test_type: str = Field(default="rag")
+
+
+ALLOWED_TEST_TYPES = {
+    "rag",
+    "no_answer",
+    "out_of_scope",
+    "prompt_injection"
+}
+
+
 @app.get("/health")
 def health_check():
 
@@ -64,7 +77,19 @@ def ask_question(request: QuestionRequest):
 
 
 @app.post("/evaluate")
-def evaluate_question(request: QuestionRequest):
+def evaluate_question(request: EvaluationRequest):
+
+    test_type = request.test_type.strip().lower()
+
+    if test_type not in ALLOWED_TEST_TYPES:
+
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "Invalid test_type.",
+                "allowed_test_types": sorted(ALLOWED_TEST_TYPES)
+            }
+        )
 
     try:
 
@@ -74,15 +99,17 @@ def evaluate_question(request: QuestionRequest):
             request.question,
             rag_result["answer"],
             rag_result["context"],
-            "rag"
+            test_type
         )
 
         logger.info(
-            f"EVALUATE | question={request.question!r} | status=200"
+            f"EVALUATE | question={request.question!r} | "
+            f"test_type={test_type} | status=200"
         )
 
         return {
             "question": request.question,
+            "test_type": test_type,
             "answer": rag_result["answer"],
             "sources": rag_result["sources"],
             "evaluation": evaluation
@@ -92,6 +119,7 @@ def evaluate_question(request: QuestionRequest):
 
         logger.error(
             f"EVALUATE | question={request.question!r} | "
+            f"test_type={test_type} | "
             f"status=500 | error={e}"
         )
 
